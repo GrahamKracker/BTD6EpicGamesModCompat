@@ -8,7 +8,7 @@ on:
 
 env:
   PROJECT_NAME: BTD6EpicGamesModCompat
-  MELONLOADER_BRANCH:
+  BLOONSTD6: ./BloonsTD6
 
 jobs:
   build:
@@ -23,7 +23,6 @@ jobs:
 
 
       - name: Download Latest MelonLoader
-        if: env.MELONLOADER_BRANCH == ''
         uses: robinraju/release-downloader@v1.4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
