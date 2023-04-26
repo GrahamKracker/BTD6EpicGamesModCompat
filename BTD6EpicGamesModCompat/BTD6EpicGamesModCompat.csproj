@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <RootNamespace>BTD6EpicGamesModCompat</RootNamespace>
+        <Configurations>Debug;Release</Configurations>
+        <Nullable>enable</Nullable>
+        <AssemblyName>BTD6EpicGamesModCompat</AssemblyName>
+        <LangVersion>preview</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\BTD6EOSBypasser.dll" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="0Harmony">
+            <HintPath>C:\Program Files\Epic Games\BloonsTD6\MelonLoader\net6\0Harmony.dll</HintPath>
+        </Reference>
+        <Reference Include="MelonLoader">
+            <HintPath>C:\Program Files\Epic Games\BloonsTD6\MelonLoader\net6\MelonLoader.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="C:\Program Files\Epic Games\BloonsTD6\Plugins" />
+    </Target>
+
+</Project>
