@@ -7,6 +7,9 @@
         <AssemblyName>BTD6EpicGamesModCompat</AssemblyName>
         <LangVersion>default</LangVersion>
     </PropertyGroup>
+    <ItemGroup>
+        <None Include=".github\workflows\build.yml" />
+    </ItemGroup>
     
     <Import Project="./btd6epic.targets" /> 
 </Project>
