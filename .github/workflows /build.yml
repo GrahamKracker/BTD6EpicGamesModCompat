@@ -1,0 +1,70 @@
+name: Build
+
+on:
+  push:
+    branches: [ "master" ]
+    tags:
+      - '*'
+
+env:
+  PROJECT_NAME: BTD6EpicGamesModCompat
+  MELONLOADER_BRANCH:
+
+jobs:
+  build:
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone Repo
+        uses: actions/checkout@master
+        with:
+          path: ${{ env.PROJECT_NAME }}
+
+
+      - name: Download Latest MelonLoader
+        if: env.MELONLOADER_BRANCH == ''
+        uses: robinraju/release-downloader@v1.4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: LavaGang/MelonLoader
+          fileName: MelonLoader.x64.zip
+          tarBall: false
+          zipBall: false
+          latest: true
+      - name: Extract Latest MelonLoader
+        if: env.MELONLOADER_BRANCH == ''
+        shell: bash
+        run: unzip MelonLoader.x64.zip -d ${{ env.BLOONSTD6 }}
+
+
+      - name: Clone Dependencies Repo
+        uses: actions/checkout@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: doombubbles/btd6-ci-dependencies
+          ref: main
+          path: ${{ env.BLOONSTD6 }}/MelonLoader/Il2CppAssemblies
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x # net6 can still build older as well
+
+      - name: Build
+        run: dotnet build -c Release -p:BloonsTD6="../${{ env.BLOONSTD6 }}" "${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj"
+
+      - name: Upload Mod DLL
+        uses: actions/upload-artifact@v2.2.4
+        with:
+          name: ${{ env.PROJECT_NAME }}.dll
+          path: ${{ env.BLOONSTD6 }}/Mods/${{ env.PROJECT_NAME }}.dll
+
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: ${{ env.BLOONSTD6 }}/Mods/${{ env.PROJECT_NAME }}.dll
+          body_path: ${{ env.PROJECT_NAME }}/LATEST.md
+          fail_on_unmatched_files: true
