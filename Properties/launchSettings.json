@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "BloonsTD6": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\Epic Games\\BloonsTD6\\BloonsTD6.exe",
+      "workingDirectory": "C:\\Program Files\\Epic Games\\BloonsTD6"
+    }
+  }
+}

@@ -1,14 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <RootNamespace>BTD6EOSBypasser</RootNamespace>
+        <RootNamespace>BTD6EpicGamesModCompat</RootNamespace>
         <Configurations>Debug;Release</Configurations>
         <Nullable>enable</Nullable>
-        <AssemblyName>BTD6EOSBypasser</AssemblyName>
-        <LangVersion>preview</LangVersion>
+        <AssemblyName>BTD6EpicGamesModCompat</AssemblyName>
+        <LangVersion>default</LangVersion>
     </PropertyGroup>
-
 
     <ItemGroup>
         <Reference Include="0Harmony">
@@ -49,8 +47,9 @@
         </Reference>
     </ItemGroup>
 
+
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Copy SourceFiles="$(TargetPath)" DestinationFolder="..\BTD6EpicGamesModCompat\Resources"/>
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="C:\Program Files\Epic Games\BloonsTD6\Plugins" />
     </Target>
 
 </Project>
