@@ -4,7 +4,7 @@
         <BloonsTD6>C:\Program Files\Epic Games\BloonsTD6\</BloonsTD6>
         <Il2CppAssemblies>$(BloonsTD6)\MelonLoader\Il2CppAssemblies</Il2CppAssemblies>
         <ManagedFolder>$(BloonsTD6)\MelonLoader\Managed</ManagedFolder>
-        <OutputFolder Condition="'$(OutputFolder)' == ''">Mods</OutputFolder>
+        <OutputFolder Condition="'$(OutputFolder)' == ''">Plugins</OutputFolder>
     </PropertyGroup>
 
     <!--References to MelonLoader dependencies-->
@@ -39,7 +39,6 @@
         <Reference Include="$(Il2CppAssemblies)\Il2CppNewtonsoft.Json.dll" Private="false"/>
         <Reference Include="$(Il2CppAssemblies)\Unity.Addressables.dll" Private="false"/>
         <Reference Include="$(Il2CppAssemblies)\UnityEngine.IMGUIModule.dll" Private="false"/>
-        <Reference Include="$(Il2CppAssemblies)\Il2CppFacepunch.Steamworks.dll" Private="false"/>
         <Reference Include="$(Il2CppAssemblies)\Il2CppUniWebView-CSharp.dll" Private="false"/>
         
         

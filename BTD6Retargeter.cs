@@ -1,72 +1,58 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+
 using MelonLoader;
 using MelonLoader.Utils;
 
 namespace BTD6EpicGamesModCompat;
 
-internal static class Btd6Retargeter
-{
-    public static void Retarget()
-    {
+internal static class Btd6Retargeter {
+    private readonly record struct GameTarget(int Index, string Developer, string GameName);
+
+    public static void Retarget() {
         Plugin.Logger.WriteSpacer();
         Plugin.Logger.Msg("Loading mods from " + MelonEnvironment.ModsDirectory + "...");
         Plugin.Logger.Msg(ConsoleColor.Magenta, "------------------------------");
 
-        var modAssemblies = Directory.GetFiles(MelonEnvironment.ModsDirectory).Select(modFile =>
-        {
-            if (!Path.HasExtension(modFile) || !Path.GetExtension(modFile).Equals(".dll")) return null!;
-            return MelonAssembly.LoadMelonAssembly(modFile, false);
-        }).Where(melon => melon is not null).OrderBy(melon =>
-            MelonUtils.PullAttributeFromAssembly<MelonPriorityAttribute>(melon.Assembly)?.Priority ?? 0).ToArray()!;
-
         Plugin.Logger.WriteSpacer();
         Plugin.Logger.Msg("Retargeting mods...");
         Plugin.Logger.Msg(ConsoleColor.Magenta, "------------------------------");
-        foreach (var melonAssembly in modAssemblies)
-        {
-            melonAssembly.LoadMelons();
-            foreach (var mod in melonAssembly.LoadedMelons)
-            {
-                if (mod is null)
-                    continue;
 
-                if (mod.Games.Length < 1)
-                    continue;
+        IOrderedEnumerable<MelonAssembly> assemblies = (from modFile in Directory.GetFiles(MelonEnvironment.ModsDirectory)
+                                                        select (!Path.HasExtension(modFile) || !Path.GetExtension(modFile).Equals(".dll")) ? null : MelonAssembly.LoadMelonAssembly(modFile, false) into melon
+                                                        where melon != null
+                                                        orderby MelonUtils.PullAttributeFromAssembly<MelonPriorityAttribute>(melon.Assembly, false)?.Priority ?? 0
+                                                        select melon);
 
-                if (!TargetsBTD6(mod) || TargetsBTD6Epic(mod))
-                    continue;
+        Parallel.ForEach(assemblies, assembly => {
+            assembly.LoadMelons();
 
+            using IEnumerator<MelonBase> melons = assembly.LoadedMelons.GetEnumerator();
 
-                var targetIndex = BTD6TargetIndex(mod);
-                mod.Games[targetIndex] = new MelonGameAttribute("Ninja Kiwi", "BloonsTD6-Epic");
-                Plugin.Logger.Msg(
-                    $"Retargeted [{mod.Info.Name} v{mod.Info.Version} by {mod.Info.Author}] to BloonsTD6-Epic");
+            while (melons.MoveNext()) {
+                if (melons.Current is { } melon) {
+                    bool hasEpicGames = false;
+                    int steamIndex = -1;
+
+                    for (int i = 0; i < melon.Games.Length; i++) {
+                        MelonGameAttribute game = melon.Games[i];
+                        if (game.Developer.Equals("Ninja Kiwi") && game.Name.Contains("BloonsTD6")) {
+                            if (!(hasEpicGames |= game.Name.Contains("-Epic")))
+                                steamIndex = i;
+                        }
+                    }
+
+                    if (!hasEpicGames && steamIndex != -1) {
+                        melon.Games[steamIndex] = new MelonGameAttribute("Ninja Kiwi", "BloonsTD6-Epic");
+                        Plugin.Logger.Msg($"Retargeted [{melon.Info.Name} v{melon.Info.Version} by {melon.Info.Author}] to BloonsTD6-Epic");
+                    }
+                }
             }
-
-            melonAssembly.UnregisterMelons(null, true);
-            melonAssembly.LoadMelons();
-        }
-    }
-
-    private static bool TargetsBTD6(MelonBase mod)
-    {
-        return mod.Games.Any(game => game.Universal || IsTargetTo(game, "Ninja Kiwi", "BloonsTD6"));
-    }
-
-    private static bool TargetsBTD6Epic(MelonBase mod)
-    {
-        return mod.Games.Any(game => game.Universal || IsTargetTo(game, "Ninja Kiwi", "BloonsTD6-Epic"));
-    }
-
-    private static int BTD6TargetIndex(MelonBase mod)
-    {
-        return Array.FindIndex(mod.Games, game => IsTargetTo(game, "Ninja Kiwi", "BloonsTD6"));
-    }
-
-    private static bool IsTargetTo(MelonGameAttribute game, string dev, string name)
-    {
-        return game.Developer.Equals(dev) && game.Name.Equals(name);
+            assembly.UnregisterMelons(silent: true);
+            assembly.LoadMelons();
+        });
     }
 }
