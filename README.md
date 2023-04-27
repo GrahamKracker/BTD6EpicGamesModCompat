@@ -1,4 +1,7 @@
 # BTD6 Epic Games Mod Compat
+
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/daa8fdc1ee484a7cb796b2bb265f3088)](https://app.codacy.com/gh/KosmicShovel/BTD6EpicGamesModCompat/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+
 A compatibility layer that allows mods to be used on the Epic Games version of BloonsTD6.
 
 ---
