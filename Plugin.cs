@@ -5,7 +5,7 @@ using BTD6EpicGamesModCompat;
 using MelonLoader;
 
 [assembly: HarmonyDontPatchAll]
-[assembly: MelonInfo(typeof(Plugin), "BTD6 Epic Games Mod Compat", "1.1.0", "GrahamKracker")]
+[assembly: MelonInfo(typeof(Plugin), "BTD6 Epic Games Mod Compat", "1.1.2", "GrahamKracker")]
 [assembly: MelonGame("Ninja Kiwi", "BloonsTD6-Epic")]
 
 namespace BTD6EpicGamesModCompat;
