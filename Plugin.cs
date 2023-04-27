@@ -1,5 +1,7 @@
 ﻿using System;
+
 using BTD6EpicGamesModCompat;
+
 using MelonLoader;
 
 [assembly: HarmonyDontPatchAll]
@@ -8,12 +10,10 @@ using MelonLoader;
 
 namespace BTD6EpicGamesModCompat;
 
-public sealed class Plugin : MelonPlugin
-{
+public sealed class Plugin : MelonPlugin {
     public static MelonLogger.Instance Logger { get; private set; } = null!;
 
-    public override void OnPreInitialization()
-    {
+    public override void OnPreInitialization() {
         Logger = LoggerInstance;
 
         EOSSDK.Remove();
@@ -22,18 +22,15 @@ public sealed class Plugin : MelonPlugin
         AppDomain.CurrentDomain.UnhandledException += (_, _) => EOSSDK.Restore();
     }
 
-    public override void OnInitializeMelon()
-    {
+    public override void OnInitializeMelon() {
         HarmonyInstance.PatchAll();
     }
 
-    public override void OnApplicationQuit()
-    {
+    public override void OnApplicationQuit() {
         EOSSDK.Restore();
     }
 
-    public override void OnPreModsLoaded()
-    {
+    public override void OnPreModsLoaded() {
         Btd6Retargeter.Retarget();
     }
 }
