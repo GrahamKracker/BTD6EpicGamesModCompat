@@ -10,8 +10,6 @@ using MelonLoader.Utils;
 namespace BTD6EpicGamesModCompat;
 
 internal static class Btd6Retargeter {
-    private readonly record struct GameTarget(int Index, string Developer, string GameName);
-
     public static void Retarget() {
         Plugin.Logger.WriteSpacer();
         Plugin.Logger.Msg("Loading mods from " + MelonEnvironment.ModsDirectory + "...");
@@ -40,8 +38,10 @@ internal static class Btd6Retargeter {
                     for (int i = 0; i < melon.Games.Length; i++) {
                         MelonGameAttribute game = melon.Games[i];
                         if (game.Developer.Equals("Ninja Kiwi") && game.Name.Contains("BloonsTD6")) {
-                            if (!(hasEpicGames |= game.Name.Contains("-Epic")))
+                            hasEpicGames |= game.Name.Contains("-Epic");
+                            if (!hasEpicGames) {
                                 steamIndex = i;
+                            }
                         }
                     }
 
