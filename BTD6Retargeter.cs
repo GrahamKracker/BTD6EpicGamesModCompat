@@ -21,11 +21,11 @@ internal static class Btd6Retargeter {
         Plugin.Logger.Msg("Retargeting mods...");
         Plugin.Logger.Msg(ConsoleColor.Magenta, "------------------------------");
 
-        IOrderedEnumerable<MelonAssembly> assemblies = (from modFile in Directory.GetFiles(MelonEnvironment.ModsDirectory)
-                                                        select (!Path.HasExtension(modFile) || !Path.GetExtension(modFile).Equals(".dll")) ? null : MelonAssembly.LoadMelonAssembly(modFile, false) into melon
-                                                        where melon != null
-                                                        orderby MelonUtils.PullAttributeFromAssembly<MelonPriorityAttribute>(melon.Assembly, false)?.Priority ?? 0
-                                                        select melon);
+        IOrderedEnumerable<MelonAssembly> assemblies = from modFile in Directory.GetFiles(MelonEnvironment.ModsDirectory)
+            select !Path.HasExtension(modFile) || !Path.GetExtension(modFile).Equals(".dll") ? null : MelonAssembly.LoadMelonAssembly(modFile, false) into melon
+            where melon != null
+            orderby MelonUtils.PullAttributeFromAssembly<MelonPriorityAttribute>(melon.Assembly)?.Priority ?? 0
+            select melon;
 
         Parallel.ForEach(assemblies, assembly => {
             assembly.LoadMelons();
@@ -39,9 +39,8 @@ internal static class Btd6Retargeter {
 
                     for (int i = 0; i < melon.Games.Length; i++) {
                         MelonGameAttribute game = melon.Games[i];
-                        if (game.Developer.Equals("Ninja Kiwi") && game.Name.Contains("BloonsTD6")) {
-                            if (!(hasEpicGames |= game.Name.Contains("-Epic")))
-                                steamIndex = i;
+                        if (game.Developer.Equals("Ninja Kiwi") && game.Name.Contains("BloonsTD6") && !(hasEpicGames |= game.Name.Contains("-Epic"))) {
+                            steamIndex = i;
                         }
                     }
 
