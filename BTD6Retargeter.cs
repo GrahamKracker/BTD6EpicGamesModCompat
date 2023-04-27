@@ -19,11 +19,11 @@ internal static class Btd6Retargeter {
         Plugin.Logger.Msg("Retargeting mods...");
         Plugin.Logger.Msg(ConsoleColor.Magenta, "------------------------------");
 
-        IOrderedEnumerable<MelonAssembly> assemblies = (from modFile in Directory.GetFiles(MelonEnvironment.ModsDirectory)
-                                                        select (!Path.HasExtension(modFile) || !Path.GetExtension(modFile).Equals(".dll")) ? null : MelonAssembly.LoadMelonAssembly(modFile, false) into melon
-                                                        where melon != null
-                                                        orderby MelonUtils.PullAttributeFromAssembly<MelonPriorityAttribute>(melon.Assembly, false)?.Priority ?? 0
-                                                        select melon);
+        IOrderedEnumerable<MelonAssembly> assemblies = from modFile in Directory.GetFiles(MelonEnvironment.ModsDirectory)
+                                                       select !Path.HasExtension(modFile) || !Path.GetExtension(modFile).Equals(".dll") ? null : MelonAssembly.LoadMelonAssembly(modFile, false) into melon
+                                                       where melon != null
+                                                       orderby MelonUtils.PullAttributeFromAssembly<MelonPriorityAttribute>(melon.Assembly)?.Priority ?? 0
+                                                       select melon;
 
         Parallel.ForEach(assemblies, assembly => {
             assembly.LoadMelons();
