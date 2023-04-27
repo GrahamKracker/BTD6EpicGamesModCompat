@@ -10,8 +10,6 @@ using MelonLoader.Utils;
 namespace BTD6EpicGamesModCompat;
 
 internal static class Btd6Retargeter {
-    private readonly record struct GameTarget(int Index, string Developer, string GameName);
-
     public static void Retarget() {
         Plugin.Logger.WriteSpacer();
         Plugin.Logger.Msg("Loading mods from " + MelonEnvironment.ModsDirectory + "...");
