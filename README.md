@@ -8,7 +8,7 @@ A compatibility layer that allows mods to be used on the Epic Games version of B
 
 ## Installation
 **ONLY FOR EPIC GAMES, NOT STEAM**
-1.  Download [MelonLoader.Installer.exe](https://github.com/LavaGang/MelonLoader/releases/v0.6.0).
+1.  Download [MelonLoader.Installer.exe](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.Installer.exe).
 2.  Run the exe file, then go to `Settings`, and enable "Show ALPHA Pre-Releases".
 3.  Go back to `Automated`, and set version to 0.6.1 if it isn't already.
 4.  Select `BloonsTD6.exe` from the BloonsTD6 install folder, and hit install.
