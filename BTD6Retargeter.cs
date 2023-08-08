@@ -8,6 +8,32 @@ namespace BTD6EpicGamesModCompat;
 
 internal static class Btd6Retargeter
 {
+    private static MelonAssembly GetAssembly(string fileName)
+    {
+        try
+        {
+            return MelonAssembly.LoadMelonAssembly(fileName, false);
+        }
+        catch (Exception e)
+        {
+            Plugin.Logger.Error(e);
+            return null;
+        }
+    }
+
+    private static int GetPriority(MelonAssembly assembly)
+    {
+        try
+        {
+            return MelonUtils.PullAttributeFromAssembly<MelonPriorityAttribute>(assembly.Assembly)?.Priority ?? 0;
+        }
+        catch (Exception e)
+        {
+            Plugin.Logger.Error(e);
+            return 0;
+        }
+    }
+
     public static void Retarget()
     {
         Plugin.Logger.WriteSpacer();
@@ -18,14 +44,13 @@ internal static class Btd6Retargeter
         Plugin.Logger.Msg("Retargeting mods...");
         Plugin.Logger.Msg(ConsoleColor.Magenta, "------------------------------");
 
-        IOrderedEnumerable<MelonAssembly> assemblies =
-            from modFile in Directory.GetFiles(MelonEnvironment.ModsDirectory)
+        var assemblies = from modFile in Directory.GetFiles(MelonEnvironment.ModsDirectory)
             select !Path.HasExtension(modFile) || !Path.GetExtension(modFile).Equals(".dll")
                 ? null
-                : MelonAssembly.LoadMelonAssembly(modFile, false)
+                : GetAssembly(modFile)
             into melon
             where melon != null
-            orderby MelonUtils.PullAttributeFromAssembly<MelonPriorityAttribute>(melon.Assembly)?.Priority ?? 0
+            orderby GetPriority(melon)
             select melon;
 
         foreach (var assembly in assemblies)
@@ -33,10 +58,10 @@ internal static class Btd6Retargeter
             try
             {
                 assembly.LoadMelons();
-                
+
                 foreach (var melon in assembly.LoadedMelons.Where(melon => melon is not null))
                 {
-                    var alreadyHasEpicGamesAttribute = false;
+                    var alreadyHasEpicGamesInAttribute = false;
                     var steamIndex = -1;
 
                     for (int i = 0; i < melon.Games.Length; i++)
@@ -44,8 +69,8 @@ internal static class Btd6Retargeter
                         var game = melon.Games[i];
                         if (game.Developer.Equals("Ninja Kiwi") && game.Name.Contains("BloonsTD6"))
                         {
-                            alreadyHasEpicGamesAttribute |= game.Name.Contains("-Epic");
-                            if (!alreadyHasEpicGamesAttribute)
+                            alreadyHasEpicGamesInAttribute |= game.Name.Contains("-Epic");
+                            if (!alreadyHasEpicGamesInAttribute)
                             {
                                 steamIndex = i;
                                 break;
@@ -53,7 +78,7 @@ internal static class Btd6Retargeter
                         }
                     }
 
-                    if (!alreadyHasEpicGamesAttribute && steamIndex != -1)
+                    if (!alreadyHasEpicGamesInAttribute && steamIndex != -1)
                     {
                         melon.Games[steamIndex] = new MelonGameAttribute("Ninja Kiwi", "BloonsTD6-Epic");
                         Plugin.Logger.Msg(
