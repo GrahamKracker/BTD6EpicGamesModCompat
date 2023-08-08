@@ -9,7 +9,7 @@ A compatibility layer that allows mods to be used on the Epic Games version of B
 ## Installation
 **ONLY FOR EPIC GAMES, NOT STEAM**
 1.  Install Melonloader using the [install guide](https://hemisemidemipresent.github.io/btd6-modding-tutorial/).
-2.  Make sure you open the game at least once before installing the plugin, so Melonloader can generate the nescessary files.
+2.  Make sure you open the game at least once before installing the plugin, so Melonloader can generate the necessary files.
 3.  Download [BTD6EpicGamesModCompat.dll](https://github.com/GrahamKracker/BTD6EpicGamesModCompat/releases/latest).
 4.  Place it into  your `\EpicGames\BloonsTD6\Plugins` folder.
 5.  Run the game, and you should be good to go.
@@ -24,7 +24,7 @@ It is not possible to log in with an Epic Games account while mods are active be
 2.  Get linking code from the Ninja Kiwi game on Steam or mobile and log into BloonsTD6-Epic.
 
 ### How to log in with an Epic account:
-1.  Unistall MelonLoader.
+1.  Uninstall MelonLoader.
 2.  Log in with Epic Games to BloonsTD6-Epic.
 3.  Get linking code from the new account to log into a Ninja Kiwi game on Steam or mobile.
 4.  Reinstall MelonLoader.

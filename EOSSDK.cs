@@ -13,19 +13,19 @@ internal static class EOSSDK {
     private const string EOSSDKBackupPath = BackupFolder + EOSSDKName;
 
     public static void Remove() {
-        Directory.CreateDirectory(BackupFolder);
+        /*Directory.CreateDirectory(BackupFolder);
         if (File.Exists(EOSSDKPath)) {
             File.Move(EOSSDKPath, EOSSDKBackupPath);
         }
 
-        Plugin.Logger.Msg("Removed EOSSDK");
+        Plugin.Logger.Msg("Removed EOSSDK");*/
     }
 
     public static void Restore() {
-        if (File.Exists(EOSSDKBackupPath)) {
+        /*if (File.Exists(EOSSDKBackupPath)) {
             File.Move(EOSSDKBackupPath, EOSSDKPath);
         }
 
-        Plugin.Logger.Msg("Restored EOSSDK");
+        Plugin.Logger.Msg("Restored EOSSDK");*/
     }
 }

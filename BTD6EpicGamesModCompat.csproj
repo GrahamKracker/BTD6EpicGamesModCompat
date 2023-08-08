@@ -6,10 +6,9 @@
         <Nullable>enable</Nullable>
         <AssemblyName>BTD6EpicGamesModCompat</AssemblyName>
         <LangVersion>default</LangVersion>
+        <DebugType>embedded</DebugType>
+        <Optimize>true</Optimize>
     </PropertyGroup>
-    <ItemGroup>
-        <None Include=".github\workflows\build.yml" />
-    </ItemGroup>
     
     <Import Project="./btd6epic.targets" /> 
 </Project>
