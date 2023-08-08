@@ -15,18 +15,6 @@ public sealed class Plugin : MelonPlugin {
 
     public override void OnPreInitialization() {
         Logger = LoggerInstance;
-
-        EOSSDK.Remove();
-        AppDomain.CurrentDomain.ProcessExit += (_, _) => EOSSDK.Restore();
-        AppDomain.CurrentDomain.UnhandledException += (_, _) => EOSSDK.Restore();
-    }
-
-    public override void OnInitializeMelon() {
-        //HarmonyInstance.PatchAll();
-    }
-
-    public override void OnApplicationQuit() {
-        EOSSDK.Restore();
     }
 
     public override void OnPreModsLoaded() {
