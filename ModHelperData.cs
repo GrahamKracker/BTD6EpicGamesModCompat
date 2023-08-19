@@ -8,4 +8,5 @@ public static class ModHelperData
     internal const string RepoOwner = "GrahamKracker";
     internal const string RepoName = "BTD6EpicGamesModCompat";
     internal const string WorksOnVersion = "38.2";
+    internal const bool Plugin = true;
 }
